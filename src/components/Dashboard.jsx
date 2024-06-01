@@ -67,7 +67,7 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold mb-10">Alert Categories</h2>
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
-            <Pie data={pieChartData} dataKey="value" nameKey="category" cx="50%" cy="50%" outerRadius={200} fill="#8884d8" label>
+            <Pie data={pieChartData} dataKey="value" nameKey="category" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
               {pieChartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill="#82ca9d" />
               ))}
@@ -81,7 +81,7 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold mb-10">Protocol Distribution</h2>
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
-            <Pie data={protocolChartData} dataKey="value" nameKey="proto" cx="50%" cy="50%" outerRadius={200} fill="#8884d8" label>
+            <Pie data={protocolChartData} dataKey="value" nameKey="proto" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
               {protocolChartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill="#82ca9d" />
               ))}
