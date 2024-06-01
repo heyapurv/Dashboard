@@ -15,7 +15,8 @@ const Dashboard = () => {
     src_ip: d.src_ip,
     dest_ip: d.dest_ip,
     category: d.alert ? d.alert.category : 'Unknown',
-    proto: d.proto
+    proto: d.proto,
+    severity: d.alert ? d.alert.severity : 0
   }));
 
   // Group data by category for bar chart
@@ -103,11 +104,30 @@ const Dashboard = () => {
     value: timeSeriesData[timestamp]
   }));
 
-  return (
-    <div className="dashboard bg-gray-900 text-white min-h-screen p-8">
-      <h1 className="text-3xl font-bold mb-8">Network Alerts Dashboard</h1>
+  // Group data by severity for bar chart
+  const severityData = parsedData.reduce((acc, cur) => {
+    const severity = cur.severity;
+    if (!acc[severity]) {
+      acc[severity] = 1;
+    } else {
+      acc[severity]++;
+    }
+    return acc;
+  }, {});
 
-      <div className="chart-container mb-12">
+  // Prepare data for severity bar chart
+  const severityChartData = Object.keys(severityData).map(severity => ({
+    severity,
+    value: severityData[severity]
+  }));
+
+  
+
+  return (
+    <div className="dashboard bg-gray-900 text-white min-h-screen ">
+      <h1 className="text-3xl font-bold mb-8">Network Alerts Dashboard</h1>
+{/* 
+      <div className="chart-container mb-12 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Time Series of Alerts</h2>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={timeSeriesChartData}>
@@ -118,9 +138,9 @@ const Dashboard = () => {
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
 
-      <div className="chart-container mb-12">
+      <div className="chart-container mb-12 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Alert Categories</h2>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={categoryChartData}>
@@ -133,7 +153,7 @@ const Dashboard = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="chart-container mb-12">
+      <div className="chart-container mb-12 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Protocol Distribution</h2>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={protocolChartData}>
@@ -146,7 +166,7 @@ const Dashboard = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="chart-container mb-12">
+      {/* <div className="chart-container mb-12 overflow-x-auto ">
         <h2 className="text-xl font-semibold mb-4">Source IPs</h2>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={srcIpChartData}>
@@ -157,9 +177,9 @@ const Dashboard = () => {
             <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
 
-      <div className="chart-container mb-12">
+      <div className="chart-container mb-12 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Destination IPs</h2>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={destIpChartData}>
@@ -170,6 +190,21 @@ const Dashboard = () => {
             <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="chart-container mb-12 overflow-x-auto">
+        <h2 className="text-xl font-semibold mb-4">Severity Distribution</h2>
+        <div className="w-full min-w-0" style={{ minWidth: '600px' }}>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={severityChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="severity" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
